@@ -37,14 +37,18 @@ private func analyzeSentiment(_ text: String) -> (score: Double, sentiment: Sent
 
 struct FeedbackView: View {
     let conditionName: String
+    let sessionID: UUID
     @Environment(\.dismiss) private var dismiss
 
     @State private var text = ""
     @State private var rating = 0
     @State private var sentimentScore: Double = 0
     @State private var sentiment: Sentiment = .neutral
-    @State private var history: [(text: String, sentiment: Sentiment, date: Date)] = []
     @State private var submitted = false
+
+    private var feedbacks: [Feedback] {
+        ScanHistoryStore.shared.sessions.first(where: { $0.id == sessionID })?.feedbacks ?? []
+    }
 
     var body: some View {
         NavigationStack {
@@ -55,7 +59,7 @@ struct FeedbackView: View {
                     textSection
                     if !text.isEmpty { sentimentPreview }
                     submitButton
-                    if !history.isEmpty { historySection }
+                    if !feedbacks.isEmpty { historySection }
                 }
                 .padding(20)
             }
@@ -160,10 +164,17 @@ struct FeedbackView: View {
     private var submitButton: some View {
         Button {
             guard rating > 0 else { return }
-            history.insert((text: text, sentiment: sentiment, date: Date()), at: 0)
-            text = ""
-            rating = 0
-            submitted = true
+            Task {
+                await ScanHistoryStore.shared.addFeedback(
+                    for: sessionID,
+                    rating: rating,
+                    comment: text,
+                    sentimentScore: sentimentScore
+                )
+                text = ""
+                rating = 0
+                submitted = true
+            }
         } label: {
             Text("Kirim Ulasan")
                 .fontWeight(.semibold)
@@ -181,20 +192,31 @@ struct FeedbackView: View {
                 .font(.subheadline).fontWeight(.semibold)
                 .foregroundStyle(.secondary)
 
-            ForEach(history, id: \.date) { item in
+            ForEach(feedbacks, id: \.id) { fb in
                 VStack(alignment: .leading, spacing: 4) {
                     HStack {
-                        Text(item.sentiment.emoji)
-                        Text(item.sentiment.label)
-                            .font(.caption).fontWeight(.semibold)
-                            .foregroundStyle(item.sentiment.color)
+                        // Show rating stars
+                        HStack(spacing: 2) {
+                            ForEach(1...5, id: \.self) { i in
+                                Image(systemName: i <= fb.rating ? "star.fill" : "star")
+                                    .font(.caption2)
+                                    .foregroundStyle(i <= fb.rating ? Color.yellow : Color.gray.opacity(0.3))
+                            }
+                        }
                         Spacer()
-                        Text(item.date.formatted(date: .omitted, time: .shortened))
+                        Text(fb.date.formatted(date: .omitted, time: .shortened))
                             .font(.caption2).foregroundStyle(.tertiary)
                     }
-                    if !item.text.isEmpty {
-                        Text(item.text)
+                    if !fb.comment.isEmpty {
+                        Text(fb.comment)
                             .font(.caption).foregroundStyle(.secondary).lineLimit(2)
+                    }
+                    // Sentiment score bar
+                    HStack(spacing: 4) {
+                        let s: Sentiment = fb.sentimentScore >= 0.3 ? .positive : (fb.sentimentScore <= -0.3 ? .negative : .neutral)
+                        Text(s.emoji).font(.caption2)
+                        Text("\(String(format: "%.2f", fb.sentimentScore))")
+                            .font(.caption2).foregroundStyle(s.color)
                     }
                 }
                 .padding(12)
@@ -206,5 +228,5 @@ struct FeedbackView: View {
 }
 
 #Preview {
-    FeedbackView(conditionName: "Jerawat")
+    FeedbackView(conditionName: "Jerawat", sessionID: UUID())
 }

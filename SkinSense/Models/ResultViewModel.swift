@@ -15,14 +15,16 @@ final class ResultViewModel {
 
     private let ai = AIService()
 
-    func fetchExplanation(for condition: SkinCondition) async {
-        guard explanation == nil else { return } // sudah ada, skip
+    func fetchExplanation(for condition: SkinCondition, sessionID: UUID) async {
+        guard explanation == nil else { return }
 
         isLoading = true
         errorMessage = nil
 
         do {
-            explanation = try await ai.fetchExplanation(for: condition)
+            let exp = try await ai.fetchExplanation(for: condition)
+            explanation = exp
+            await ScanHistoryStore.shared.updateExplanation(for: sessionID, with: exp)
         } catch {
             errorMessage = error.localizedDescription
         }
@@ -30,9 +32,9 @@ final class ResultViewModel {
         isLoading = false
     }
 
-    func retry(condition: SkinCondition) async {
+    func retry(condition: SkinCondition, sessionID: UUID) async {
         explanation = nil
         errorMessage = nil
-        await fetchExplanation(for: condition)
+        await fetchExplanation(for: condition, sessionID: sessionID)
     }
 }

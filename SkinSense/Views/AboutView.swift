@@ -7,21 +7,25 @@
 
 import SwiftUI
 
-struct AboutView: View {
-    private let conditions: [(label: String, treatment: TreatmentLevel)] = [
-        ("Jerawat",              .selfMedication),
-        ("Eksim",                .doctor),
-        ("Gigitan / Infestasi",  .selfMedication),
-        ("Lupus Kulit",          .doctor),
-        ("Tahi Lalat",           .none),
-        ("Rosacea",              .doctor),
-        ("Vitiligo",             .doctor),
-    ]
+private func treatmentLevel(for label: String) -> TreatmentLevel {
+    switch label {
+    case "Acne", "Infestations_Bites": return .selfMedication
+    case "Moles":                      return .none
+    default:                           return .doctor
+    }
+}
 
+private var version: String {
+    let ver = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0"
+    let build = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "1"
+    return "\(ver) (\(build))"
+}
+
+struct AboutView: View {
     var body: some View {
         NavigationStack {
             List {
-                // App info
+                // App branding
                 Section {
                     HStack {
                         Spacer()
@@ -46,31 +50,47 @@ struct AboutView: View {
                     .listRowBackground(Color(.secondarySystemGroupedBackground))
                 }
 
-                // Model info
-                Section("Model AI") {
-                    InfoRow(icon: "cpu.fill", color: .teal, label: "Model", value: "SkinDisease.mlpackage")
-                    InfoRow(icon: "brain", color: .purple, label: "Framework", value: "Core ML + Vision")
-                    InfoRow(icon: "sparkles", color: .orange, label: "Generative AI", value: "Gemini Flash")
-                    InfoRow(icon: "person.fill", color: .blue, label: "Trained by", value: "Setianing Budi")
+                // App info
+                Section("Informasi Aplikasi") {
+                    InfoRow(icon: "tag.fill", color: .teal, label: "Versi", value: version)
+                    InfoRow(icon: "building.2.fill", color: .blue, label: "Perusahaan", value: "Dicoding")
+                    InfoRow(icon: "person.2.fill", color: .purple, label: "Author", value: "Setianing B., Pandawa B. S.")
                 }
                 .listRowBackground(Color(.secondarySystemGroupedBackground))
 
-                // 7 conditions
+                // Model info
+                Section("Model AI") {
+                    InfoRow(icon: "cpu.fill", color: .teal, label: "Model", value: "\(Constants.modelName).\(Constants.modelExtension)")
+                    InfoRow(icon: "brain", color: .purple, label: "Framework", value: "Core ML + Vision")
+                    InfoRow(icon: "sparkles", color: .orange, label: "LLM Provider", value: "OpenAI-compatible")
+                    InfoRow(icon: "antenna.radiowaves.left.and.right", color: .green, label: "LLM Model", value: Constants.aiModelName)
+                }
+                .listRowBackground(Color(.secondarySystemGroupedBackground))
+
+                // Stats
+                Section("Statistik") {
+                    InfoRow(icon: "number.circle.fill", color: .teal, label: "Total Scan", value: "\(ScanHistoryStore.shared.sessions.count)")
+                }
+                .listRowBackground(Color(.secondarySystemGroupedBackground))
+
+                // Conditions
                 Section("Kondisi yang Dapat Dideteksi") {
-                    ForEach(conditions, id: \.label) { item in
+                    ForEach(Array(Constants.diseaseNames.keys.sorted()), id: \.self) { key in
+                        let name = Constants.diseaseNames[key]!
+                        let level = treatmentLevel(for: key)
                         HStack {
-                            Image(systemName: item.treatment.icon)
-                                .foregroundStyle(item.treatment.color)
+                            Image(systemName: level.icon)
+                                .foregroundStyle(level.color)
                                 .frame(width: 28)
-                            Text(item.label)
+                            Text(name)
                                 .font(.subheadline)
                             Spacer()
-                            Text(item.treatment.rawValue)
+                            Text(level.rawValue)
                                 .font(.caption2)
-                                .foregroundStyle(item.treatment.color)
+                                .foregroundStyle(level.color)
                                 .padding(.horizontal, 8)
                                 .padding(.vertical, 3)
-                                .background(item.treatment.color.opacity(0.1))
+                                .background(level.color.opacity(0.1))
                                 .clipShape(Capsule())
                         }
                     }

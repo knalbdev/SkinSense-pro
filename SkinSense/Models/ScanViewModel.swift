@@ -38,7 +38,7 @@ final class ScanViewModel {
                     imageData: image.jpegData(compressionQuality: 0.7),
                     scannedAt: Date()
                 )
-                ScanHistoryStore.shared.add(session)
+                await ScanHistoryStore.shared.add(session)
                 currentSession = session
                 showResult = true
             }

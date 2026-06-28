@@ -59,26 +59,48 @@ struct SkinCondition: Identifiable, Hashable {
 // MARK: - Scan Session (satu sesi scan lengkap)
 
 struct ScanSession: Identifiable {
-    let id = UUID()
+    let id: UUID
     let condition: SkinCondition
     let imageData: Data?
     let scannedAt: Date
     var aiExplanation: AIExplanation?
+    var feedbacks: [Feedback] = []
+
+    init(id: UUID = UUID(), condition: SkinCondition, imageData: Data?, scannedAt: Date, aiExplanation: AIExplanation? = nil, feedbacks: [Feedback] = []) {
+        self.id = id
+        self.condition = condition
+        self.imageData = imageData
+        self.scannedAt = scannedAt
+        self.aiExplanation = aiExplanation
+        self.feedbacks = feedbacks
+    }
 }
 
 // MARK: - AI Explanation (hasil dari Gemini)
 
-struct AIExplanation: Identifiable {
+struct AIExplanation: Identifiable, Codable {
     let id = UUID()
     let overview: String
     let symptoms: [String]
     let recommendations: [String]
     let medicines: [Medicine]
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(overview, forKey: .overview)
+        try container.encode(symptoms, forKey: .symptoms)
+        try container.encode(recommendations, forKey: .recommendations)
+        try container.encode(medicines, forKey: .medicines)
+    }
+
+    enum CodingKeys: CodingKey {
+        case overview, symptoms, recommendations, medicines
+    }
 }
 
 // MARK: - Medicine
 
-struct Medicine: Identifiable, Decodable {
+struct Medicine: Identifiable, Codable {
     let id = UUID()
     let name: String
     let type: String
@@ -88,5 +110,31 @@ struct Medicine: Identifiable, Decodable {
     enum CodingKeys: String, CodingKey {
         case name, type, dosage
         case howToUse = "how_to_use"
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(name, forKey: .name)
+        try container.encode(type, forKey: .type)
+        try container.encode(dosage, forKey: .dosage)
+        try container.encode(howToUse, forKey: .howToUse)
+    }
+}
+
+// MARK: - Feedback
+
+struct Feedback: Codable, Equatable {
+    let id: UUID
+    let rating: Int
+    let comment: String
+    let sentimentScore: Double
+    let date: Date
+
+    init(rating: Int, comment: String, sentimentScore: Double, date: Date = Date()) {
+        self.id = UUID()
+        self.rating = rating
+        self.comment = comment
+        self.sentimentScore = sentimentScore
+        self.date = date
     }
 }

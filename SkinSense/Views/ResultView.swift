@@ -56,10 +56,14 @@ struct ResultView: View {
         .navigationTitle("Hasil Deteksi")
         .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $showFeedback) {
-            FeedbackView(conditionName: condition.localizedName)
+            FeedbackView(conditionName: condition.localizedName, sessionID: session.id)
         }
         .task {
-            await vm.fetchExplanation(for: condition)
+            if let cached = session.aiExplanation {
+                vm.explanation = cached
+            } else {
+                await vm.fetchExplanation(for: condition, sessionID: session.id)
+            }
         }
     }
 
@@ -167,7 +171,7 @@ struct ResultView: View {
                 Text(message).font(.caption).foregroundStyle(.secondary)
             }
             Button("Coba Lagi") {
-                Task { await vm.retry(condition: condition) }
+                Task { await vm.retry(condition: condition, sessionID: session.id) }
             }
             .font(.subheadline).fontWeight(.semibold)
             .foregroundStyle(.teal)

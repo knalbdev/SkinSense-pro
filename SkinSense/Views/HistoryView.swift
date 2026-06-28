@@ -35,7 +35,7 @@ struct HistoryView: View {
                 if !store.sessions.isEmpty {
                     ToolbarItem(placement: .topBarTrailing) {
                         Button("Hapus Semua", role: .destructive) {
-                            store.clear()
+                            Task { await store.clear() }
                         }
                         .font(.caption)
                     }
