@@ -11,6 +11,7 @@ struct ResultView: View {
     let session: ScanSession
     @State private var vm = ResultViewModel()
     @State private var showFeedback = false
+    @State private var currentFeedback: Feedback?
 
     var condition: SkinCondition { session.condition }
 
@@ -36,19 +37,13 @@ struct ResultView: View {
                 aiSection
                     .padding(.horizontal, 20)
 
-                // Feedback button
-                Button {
-                    showFeedback = true
-                } label: {
-                    Label("Beri Ulasan Penanganan", systemImage: "text.bubble")
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 50)
-                        .background(Color.purple.opacity(0.12))
-                        .foregroundStyle(.purple)
-                        .clipShape(RoundedRectangle(cornerRadius: 14))
+                // Ulasan
+                if let fb = currentFeedback {
+                    feedbackCard(fb)
                 }
-                .padding(.horizontal, 20)
-                .padding(.bottom, 32)
+                feedbackButton
+                    .padding(.horizontal, 20)
+                    .padding(.bottom, 32)
             }
             .padding(.top, 16)
         }
@@ -59,10 +54,16 @@ struct ResultView: View {
             FeedbackView(conditionName: condition.localizedName, sessionID: session.id)
         }
         .task {
+            currentFeedback = session.feedback
             if let cached = session.aiExplanation {
                 vm.explanation = cached
             } else {
                 await vm.fetchExplanation(for: condition, sessionID: session.id)
+            }
+        }
+        .onChange(of: showFeedback) { _, showing in
+            if !showing {
+                currentFeedback = ScanHistoryStore.shared.sessions.first(where: { $0.id == session.id })?.feedback
             }
         }
     }
@@ -240,6 +241,78 @@ struct ResultView: View {
                 .foregroundStyle(color)
             content()
         }
+    }
+
+    // MARK: - Feedback
+
+    private var feedbackButton: some View {
+        Button {
+            showFeedback = true
+        } label: {
+            Label(currentFeedback == nil ? "Beri Ulasan Penanganan" : "Ubah Ulasan", systemImage: "text.bubble")
+                .frame(maxWidth: .infinity)
+                .frame(height: 50)
+                .background(Color.purple.opacity(0.12))
+                .foregroundStyle(.purple)
+                .clipShape(RoundedRectangle(cornerRadius: 14))
+        }
+    }
+
+    private func feedbackCard(_ fb: Feedback) -> some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Label("Ulasan Kamu", systemImage: "text.bubble.fill")
+                .font(.headline)
+                .foregroundStyle(.purple)
+
+            // Star rating
+            HStack(spacing: 4) {
+                ForEach(1...5, id: \.self) { i in
+                    Image(systemName: i <= fb.rating ? "star.fill" : "star")
+                        .font(.subheadline)
+                        .foregroundStyle(i <= fb.rating ? .yellow : Color.gray.opacity(0.3))
+                }
+                Spacer()
+                Text(fb.date.formatted(date: .abbreviated, time: .shortened))
+                    .font(.caption2)
+                    .foregroundStyle(.tertiary)
+            }
+
+            // Comment
+            if !fb.comment.isEmpty {
+                Text(fb.comment)
+                    .font(.caption)
+                    .foregroundStyle(.primary)
+            }
+
+            // Sentiment
+            let s: Sentiment = fb.sentimentScore >= 0.3 ? .positive : (fb.sentimentScore <= -0.3 ? .negative : .neutral)
+            HStack(spacing: 4) {
+                Text(s.emoji).font(.caption)
+                Text("\(s.label) (\(String(format: "%.2f", fb.sentimentScore)))")
+                    .font(.caption2)
+                    .foregroundStyle(s.color)
+            }
+        }
+        .padding(18)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(Color.purple.opacity(0.06))
+        .clipShape(RoundedRectangle(cornerRadius: 18))
+        .padding(.horizontal, 20)
+    }
+}
+
+// MARK: - Sentiment (local copy for display)
+
+private enum Sentiment {
+    case positive, neutral, negative
+    var emoji: String {
+        switch self { case .positive: "😍"; case .neutral: "😐"; case .negative: "😕" }
+    }
+    var label: String {
+        switch self { case .positive: "Positif"; case .neutral: "Netral"; case .negative: "Negatif" }
+    }
+    var color: Color {
+        switch self { case .positive: .green; case .neutral: .orange; case .negative: .red }
     }
 }
 

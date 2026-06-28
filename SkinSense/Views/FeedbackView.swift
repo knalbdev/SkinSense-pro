@@ -46,10 +46,6 @@ struct FeedbackView: View {
     @State private var sentiment: Sentiment = .neutral
     @State private var submitted = false
 
-    private var feedbacks: [Feedback] {
-        ScanHistoryStore.shared.sessions.first(where: { $0.id == sessionID })?.feedbacks ?? []
-    }
-
     var body: some View {
         NavigationStack {
             ScrollView {
@@ -59,7 +55,6 @@ struct FeedbackView: View {
                     textSection
                     if !text.isEmpty { sentimentPreview }
                     submitButton
-                    if !feedbacks.isEmpty { historySection }
                 }
                 .padding(20)
             }
@@ -165,14 +160,12 @@ struct FeedbackView: View {
         Button {
             guard rating > 0 else { return }
             Task {
-                await ScanHistoryStore.shared.addFeedback(
+                await ScanHistoryStore.shared.setFeedback(
                     for: sessionID,
                     rating: rating,
                     comment: text,
                     sentimentScore: sentimentScore
                 )
-                text = ""
-                rating = 0
                 submitted = true
             }
         } label: {
@@ -184,46 +177,6 @@ struct FeedbackView: View {
         .buttonStyle(.borderedProminent)
         .tint(.teal)
         .disabled(rating == 0)
-    }
-
-    private var historySection: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Text("Riwayat Ulasan")
-                .font(.subheadline).fontWeight(.semibold)
-                .foregroundStyle(.secondary)
-
-            ForEach(feedbacks, id: \.id) { fb in
-                VStack(alignment: .leading, spacing: 4) {
-                    HStack {
-                        // Show rating stars
-                        HStack(spacing: 2) {
-                            ForEach(1...5, id: \.self) { i in
-                                Image(systemName: i <= fb.rating ? "star.fill" : "star")
-                                    .font(.caption2)
-                                    .foregroundStyle(i <= fb.rating ? Color.yellow : Color.gray.opacity(0.3))
-                            }
-                        }
-                        Spacer()
-                        Text(fb.date.formatted(date: .omitted, time: .shortened))
-                            .font(.caption2).foregroundStyle(.tertiary)
-                    }
-                    if !fb.comment.isEmpty {
-                        Text(fb.comment)
-                            .font(.caption).foregroundStyle(.secondary).lineLimit(2)
-                    }
-                    // Sentiment score bar
-                    HStack(spacing: 4) {
-                        let s: Sentiment = fb.sentimentScore >= 0.3 ? .positive : (fb.sentimentScore <= -0.3 ? .negative : .neutral)
-                        Text(s.emoji).font(.caption2)
-                        Text("\(String(format: "%.2f", fb.sentimentScore))")
-                            .font(.caption2).foregroundStyle(s.color)
-                    }
-                }
-                .padding(12)
-                .background(Color(.secondarySystemGroupedBackground))
-                .clipShape(RoundedRectangle(cornerRadius: 10))
-            }
-        }
     }
 }
 

@@ -64,15 +64,15 @@ struct ScanSession: Identifiable {
     let imageData: Data?
     let scannedAt: Date
     var aiExplanation: AIExplanation?
-    var feedbacks: [Feedback] = []
+    var feedback: Feedback?
 
-    init(id: UUID = UUID(), condition: SkinCondition, imageData: Data?, scannedAt: Date, aiExplanation: AIExplanation? = nil, feedbacks: [Feedback] = []) {
+    init(id: UUID = UUID(), condition: SkinCondition, imageData: Data?, scannedAt: Date, aiExplanation: AIExplanation? = nil, feedback: Feedback? = nil) {
         self.id = id
         self.condition = condition
         self.imageData = imageData
         self.scannedAt = scannedAt
         self.aiExplanation = aiExplanation
-        self.feedbacks = feedbacks
+        self.feedback = feedback
     }
 }
 

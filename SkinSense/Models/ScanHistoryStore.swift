@@ -24,8 +24,8 @@ final class ScanRecord {
     var aiRecommendationsData: Data?
     var aiMedicinesData: Data?
 
-    // Feedback
-    var feedbacksData: Data?
+    // Feedback (single)
+    var feedbackData: Data?
 
     init(id: UUID, condition: SkinCondition, imageData: Data?, scannedAt: Date) {
         self.id = id
@@ -51,8 +51,8 @@ extension ScanRecord {
             aiRecommendationsData = try? JSONEncoder().encode(exp.recommendations)
             aiMedicinesData = try? JSONEncoder().encode(exp.medicines)
         }
-        if !session.feedbacks.isEmpty {
-            feedbacksData = try? JSONEncoder().encode(session.feedbacks)
+        if let fb = session.feedback {
+            feedbackData = try? JSONEncoder().encode(fb)
         }
     }
 
@@ -75,7 +75,7 @@ extension ScanRecord {
             explanation = nil
         }
 
-        let feedbacks = (try? JSONDecoder().decode([Feedback].self, from: feedbacksData ?? Data())) ?? []
+        let feedback = (try? JSONDecoder().decode(Feedback.self, from: feedbackData ?? Data()))
 
         return ScanSession(
             id: id,
@@ -83,7 +83,7 @@ extension ScanRecord {
             imageData: imageData,
             scannedAt: scannedAt,
             aiExplanation: explanation,
-            feedbacks: feedbacks
+            feedback: feedback
         )
     }
 }
@@ -140,17 +140,17 @@ final class ScanHistoryStore {
         await save()
     }
 
-    func addFeedback(for sessionID: UUID, rating: Int, comment: String, sentimentScore: Double) async {
+    func setFeedback(for sessionID: UUID, rating: Int, comment: String, sentimentScore: Double) async {
         let feedback = Feedback(rating: rating, comment: comment, sentimentScore: sentimentScore)
 
         guard let index = sessions.firstIndex(where: { $0.id == sessionID }) else { return }
-        sessions[index].feedbacks.insert(feedback, at: 0)
+        sessions[index].feedback = feedback
 
         let pred = #Predicate<ScanRecord> { $0.id == sessionID }
         let descriptor = FetchDescriptor<ScanRecord>(predicate: pred)
         guard let record = try? modelContext.fetch(descriptor).first else { return }
 
-        record.feedbacksData = try? JSONEncoder().encode(sessions[index].feedbacks)
+        record.feedbackData = try? JSONEncoder().encode(feedback)
         await save()
     }
 
