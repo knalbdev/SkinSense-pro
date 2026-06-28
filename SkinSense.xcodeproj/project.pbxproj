@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		140FC3612FF0EB8000612A2B /* SkinDisease.mlpackage in Sources */ = {isa = PBXBuildFile; fileRef = 140FC3602FF0EB8000612A2B /* SkinDisease.mlpackage */; };
 		A001 /* SkinSenseApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F001 /* SkinSenseApp.swift */; };
 		A002 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F002 /* ContentView.swift */; };
 		A003 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = F003 /* Constants.swift */; };
@@ -22,12 +23,12 @@
 		A032 /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F032 /* HistoryView.swift */; };
 		A033 /* FeedbackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F033 /* FeedbackView.swift */; };
 		A034 /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F034 /* AboutView.swift */; };
-		A050 /* SkinDisease.mlpackage in Resources */ = {isa = PBXBuildFile; fileRef = F050 /* SkinDisease.mlpackage */; };
 		A051 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F051 /* Assets.xcassets */; };
 		AC286C082FF0EA0000DD593D /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = AC286C072FF0E9F900DD593D /* .gitignore */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		140FC3602FF0EB8000612A2B /* SkinDisease.mlpackage */ = {isa = PBXFileReference; lastKnownFileType = folder.mlpackage; path = SkinDisease.mlpackage; sourceTree = "<group>"; };
 		AC286C072FF0E9F900DD593D /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		F001 /* SkinSenseApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkinSenseApp.swift; sourceTree = "<group>"; };
 		F002 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -44,7 +45,6 @@
 		F032 /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
 		F033 /* FeedbackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackView.swift; sourceTree = "<group>"; };
 		F034 /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
-		F050 /* SkinDisease.mlpackage */ = {isa = PBXFileReference; lastKnownFileType = wrapper.mlpackage; path = SkinDisease.mlpackage; sourceTree = "<group>"; };
 		F051 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FPROD /* SkinSense.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SkinSense.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -79,7 +79,6 @@
 				GSERVICES /* Services */,
 				GVIEWS /* Views */,
 				GRESOURCES /* Resources */,
-				F050 /* SkinDisease.mlpackage */,
 			);
 			path = SkinSense;
 			sourceTree = "<group>";
@@ -107,6 +106,7 @@
 		GRESOURCES /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				140FC3602FF0EB8000612A2B /* SkinDisease.mlpackage */,
 				F051 /* Assets.xcassets */,
 			);
 			path = Resources;
@@ -199,7 +199,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A050 /* SkinDisease.mlpackage in Resources */,
 				AC286C082FF0EA0000DD593D /* .gitignore in Resources */,
 				A051 /* Assets.xcassets in Resources */,
 			);
@@ -223,6 +222,7 @@
 				A020 /* SkinClassifierService.swift in Sources */,
 				A021 /* GeminiService.swift in Sources */,
 				A030 /* ScanView.swift in Sources */,
+				140FC3612FF0EB8000612A2B /* SkinDisease.mlpackage in Sources */,
 				A031 /* ResultView.swift in Sources */,
 				A032 /* HistoryView.swift in Sources */,
 				A033 /* FeedbackView.swift in Sources */,

@@ -13,7 +13,7 @@ final class ResultViewModel {
     var isLoading = false
     var errorMessage: String?
 
-    private let gemini = GeminiService()
+    private let ai = AIService()
 
     func fetchExplanation(for condition: SkinCondition) async {
         guard explanation == nil else { return } // sudah ada, skip
@@ -22,7 +22,7 @@ final class ResultViewModel {
         errorMessage = nil
 
         do {
-            explanation = try await gemini.fetchExplanation(for: condition)
+            explanation = try await ai.fetchExplanation(for: condition)
         } catch {
             errorMessage = error.localizedDescription
         }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum GeminiError: LocalizedError {
+enum AIError: LocalizedError {
     case invalidURL
     case encodingFailed
     case httpError(Int)
@@ -16,48 +16,53 @@ enum GeminiError: LocalizedError {
 
     var errorDescription: String? {
         switch self {
-        case .invalidURL:             return "URL Gemini tidak valid"
+        case .invalidURL:             return "URL AI tidak valid"
         case .encodingFailed:         return "Gagal encode request"
-        case .httpError(let code):    return "HTTP Error \(code) dari Gemini"
-        case .emptyResponse:          return "Gemini tidak memberikan respons"
+        case .httpError(let code):    return "HTTP Error \(code) dari server AI"
+        case .emptyResponse:          return "Server AI tidak memberikan respons"
         case .decodingFailed(let msg): return "Gagal membaca respons: \(msg)"
         }
     }
 }
 
-final class GeminiService {
+final class AIService {
 
     func fetchExplanation(for condition: SkinCondition) async throws -> AIExplanation {
-        guard let url = URL(string: Constants.geminiEndpoint) else {
-            throw GeminiError.invalidURL
+        guard let url = URL(string: Constants.aiEndpoint) else {
+            throw AIError.invalidURL
         }
 
-        let body = GeminiRequest(
-            contents: [.init(parts: [.init(text: buildPrompt(condition))])],
-            generationConfig: .init(temperature: 0.7, maxOutputTokens: 1024)
+        let body = ChatRequest(
+            model: Constants.aiModelName,
+            messages: [
+                .init(role: "system", content: "Kamu adalah dokter spesialis kulit yang ramah dan edukatif. Kembalikan HANYA JSON valid tanpa markdown, tanpa teks lain."),
+                .init(role: "user", content: buildPrompt(condition))
+            ],
+            temperature: 0.7,
+            maxTokens: 4096
         )
 
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue(Constants.geminiAPIKey, forHTTPHeaderField: "X-goog-api-key")
+        request.setValue("Bearer \(Constants.aiAPIKey)", forHTTPHeaderField: "Authorization")
         request.timeoutInterval = 30
 
         guard let bodyData = try? JSONEncoder().encode(body) else {
-            throw GeminiError.encodingFailed
+            throw AIError.encodingFailed
         }
         request.httpBody = bodyData
 
         let (data, response) = try await URLSession.shared.data(for: request)
 
         if let http = response as? HTTPURLResponse, http.statusCode != 200 {
-            throw GeminiError.httpError(http.statusCode)
+            throw AIError.httpError(http.statusCode)
         }
 
-        let geminiResp = try JSONDecoder().decode(GeminiResponse.self, from: data)
+        let chatResp = try JSONDecoder().decode(ChatResponse.self, from: data)
 
-        guard let rawText = geminiResp.firstText else {
-            throw GeminiError.emptyResponse
+        guard let rawText = chatResp.firstContent else {
+            throw AIError.emptyResponse
         }
 
         // Bersihkan markdown code block jika ada
@@ -67,7 +72,7 @@ final class GeminiService {
             .trimmingCharacters(in: .whitespacesAndNewlines)
 
         guard let jsonData = cleaned.data(using: .utf8) else {
-            throw GeminiError.emptyResponse
+            throw AIError.emptyResponse
         }
 
         do {
@@ -79,7 +84,7 @@ final class GeminiService {
                 medicines: payload.medicines
             )
         } catch {
-            throw GeminiError.decodingFailed(error.localizedDescription)
+            throw AIError.decodingFailed(error.localizedDescription)
         }
     }
 

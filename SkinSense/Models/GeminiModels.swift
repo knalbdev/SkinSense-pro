@@ -7,37 +7,39 @@
 
 import Foundation
 
-// MARK: - Request
+// MARK: - OpenAI-compatible Chat Request
 
-struct GeminiRequest: Encodable {
-    let contents: [Content]
-    let generationConfig: GenerationConfig
+struct ChatRequest: Encodable {
+    let model: String
+    let messages: [Message]
+    let temperature: Double
+    let maxTokens: Int
 
-    struct Content: Encodable {
-        let parts: [Part]
-        struct Part: Encodable { let text: String }
+    struct Message: Encodable {
+        let role: String
+        let content: String
     }
 
-    struct GenerationConfig: Encodable {
-        let temperature: Double
-        let maxOutputTokens: Int
+    enum CodingKeys: String, CodingKey {
+        case model, messages, temperature
+        case maxTokens = "max_tokens"
     }
 }
 
-// MARK: - Response
+// MARK: - OpenAI-compatible Chat Response
 
-struct GeminiResponse: Decodable {
-    let candidates: [Candidate]
+struct ChatResponse: Decodable {
+    let choices: [Choice]
 
-    struct Candidate: Decodable {
-        let content: Content
-        struct Content: Decodable {
-            let parts: [Part]
-            struct Part: Decodable { let text: String }
+    struct Choice: Decodable {
+        let message: Message
+
+        struct Message: Decodable {
+            let content: String?
         }
     }
 
-    var firstText: String? { candidates.first?.content.parts.first?.text }
+    var firstContent: String? { choices.first?.message.content }
 }
 
 // MARK: - Parsed explanation payload
