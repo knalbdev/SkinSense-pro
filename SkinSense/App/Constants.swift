@@ -8,11 +8,12 @@
 import Foundation
 
 enum Constants {
-    // Gemini API — ⚠️ pindahkan ke Config.plist sebelum push ke repo publik
-    static let geminiEndpoint = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-latest:generateContent"
-    static let geminiAPIKey   = "AQ.Ab8RN6IPaiEDpordEFA5HdYokDbfazrsP1vmLvoNdfF65zaUbw"
+    // AI API — OpenAI-compatible endpoint
+    static let aiEndpoint  = "https://openrouter.ai/api/v1/chat/completions"
+    static let aiModelName = "google/gemini-3.5-flash"
+    static let aiAPIKey    = "YOUR_API_KEY" // Ganti dengan API key kamu
 
-    // Model
+    // Core ML Model
     static let modelName      = "SkinDisease"
     static let modelExtension = "mlpackage"
 
