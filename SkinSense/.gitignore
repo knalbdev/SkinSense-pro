@@ -1,3 +1,4 @@
 *.mlpackage
 *.mlmodelc
 Config.swift
+/App/Constants

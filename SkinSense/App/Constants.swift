@@ -9,6 +9,8 @@ import Foundation
 
 enum Constants {
     // Gemini API — ⚠️ pindahkan ke Config.plist sebelum push ke repo publik
+    static let geminiEndpoint = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-latest:generateContent"
+    static let geminiAPIKey   = "AQ.Ab8RN6IPaiEDpordEFA5HdYokDbfazrsP1vmLvoNdfF65zaUbw"
 
     // Model
     static let modelName      = "SkinDisease"
