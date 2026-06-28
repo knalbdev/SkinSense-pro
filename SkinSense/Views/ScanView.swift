@@ -70,7 +70,7 @@ struct ScanView: View {
             if let img = vm.selectedImage {
                 Image(uiImage: img)
                     .resizable()
-                    .scaledToFill()
+                    .scaledToFit()
                     .frame(height: 280)
                     .clipShape(RoundedRectangle(cornerRadius: 20))
 
@@ -195,7 +195,7 @@ struct ScanView: View {
                 .font(.subheadline).fontWeight(.semibold)
                 .foregroundStyle(.secondary)
 
-            VStack(spacing: 8) {
+            VStack(alignment: .leading, spacing: 8) {
                 TipRow(icon: "sun.max.fill",      color: .yellow, text: "Gunakan pencahayaan alami yang terang")
                 TipRow(icon: "camera.macro",      color: .teal,   text: "Dekatkan kamera 10–15 cm dari kulit")
                 TipRow(icon: "checkmark.circle",  color: .green,  text: "Fokus pada area yang bermasalah")
