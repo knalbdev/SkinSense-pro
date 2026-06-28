@@ -10,13 +10,15 @@ import SwiftUI
 private func treatmentLevel(for label: String) -> TreatmentLevel {
     switch label {
     case "Acne", "Infestations_Bites": return .selfMedication
-    case "Moles":                      return .none
-    default:                           return .doctor
+    case "Moles": return .none
+    default: return .doctor
     }
 }
 
 private var version: String {
-    let ver = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0"
+    let ver =
+        Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
+        ?? "1.0"
     let build = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "1"
     return "\(ver) (\(build))"
 }
@@ -29,17 +31,22 @@ struct AboutView: View {
                 Section {
                     HStack {
                         Spacer()
-                        VStack(spacing: 12) {
-                            ZStack {
-                                Circle()
-                                    .fill(Color.teal.opacity(0.15))
+                        VStack(spacing: 8) {
+                            if let uiImage = UIImage(named: "AppIconDisplay") {
+                                Image(uiImage: uiImage)
+                                    .resizable()
                                     .frame(width: 80, height: 80)
+                                    .clipShape(
+                                        RoundedRectangle(cornerRadius: 18)
+                                    )
+                            } else {
                                 Image(systemName: "camera.viewfinder")
                                     .font(.system(size: 36))
                                     .foregroundStyle(.teal)
+                                    .frame(width: 80, height: 80)
+                                    .background(Color.teal.opacity(0.15))
+                                    .clipShape(Circle())
                             }
-                            Text("SkinSense")
-                                .font(.title3).fontWeight(.bold)
                             Text("Deteksi kondisi kulit dengan AI")
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
@@ -52,30 +59,74 @@ struct AboutView: View {
 
                 // App info
                 Section("Informasi Aplikasi") {
-                    InfoRow(icon: "tag.fill", color: .teal, label: "Versi", value: version)
-                    InfoRow(icon: "building.2.fill", color: .blue, label: "Perusahaan", value: "Dicoding")
-                    InfoRow(icon: "person.2.fill", color: .purple, label: "Author", value: "Setianing B., Pandawa B. S.")
+                    InfoRow(
+                        icon: "tag.fill",
+                        color: .teal,
+                        label: "Versi",
+                        value: version
+                    )
+                    InfoRow(
+                        icon: "building.2.fill",
+                        color: .blue,
+                        label: "Perusahaan",
+                        value: "Dicoding"
+                    )
+                    InfoRow(
+                        icon: "person.2.fill",
+                        color: .purple,
+                        label: "Author",
+                        value: "Setianing B., Pandawa B. S."
+                    )
                 }
                 .listRowBackground(Color(.secondarySystemGroupedBackground))
 
                 // Model info
                 Section("Model AI") {
-                    InfoRow(icon: "cpu.fill", color: .teal, label: "Model", value: "\(Constants.modelName).\(Constants.modelExtension)")
-                    InfoRow(icon: "brain", color: .purple, label: "Framework", value: "Core ML + Vision")
-                    InfoRow(icon: "sparkles", color: .orange, label: "LLM Provider", value: "OpenAI-compatible")
-                    InfoRow(icon: "antenna.radiowaves.left.and.right", color: .green, label: "LLM Model", value: Constants.aiModelName)
+                    InfoRow(
+                        icon: "cpu.fill",
+                        color: .teal,
+                        label: "Model",
+                        value:
+                            "\(Constants.modelName).\(Constants.modelExtension)"
+                    )
+                    InfoRow(
+                        icon: "brain",
+                        color: .purple,
+                        label: "Framework",
+                        value: "Core ML + Vision"
+                    )
+                    InfoRow(
+                        icon: "sparkles",
+                        color: .orange,
+                        label: "LLM Provider",
+                        value: "OpenAI-compatible"
+                    )
+                    InfoRow(
+                        icon: "antenna.radiowaves.left.and.right",
+                        color: .green,
+                        label: "LLM Model",
+                        value: Constants.aiModelName
+                    )
                 }
                 .listRowBackground(Color(.secondarySystemGroupedBackground))
 
                 // Stats
                 Section("Statistik") {
-                    InfoRow(icon: "number.circle.fill", color: .teal, label: "Total Scan", value: "\(ScanHistoryStore.shared.sessions.count)")
+                    InfoRow(
+                        icon: "number.circle.fill",
+                        color: .teal,
+                        label: "Total Scan",
+                        value: "\(ScanHistoryStore.shared.sessions.count)"
+                    )
                 }
                 .listRowBackground(Color(.secondarySystemGroupedBackground))
 
                 // Conditions
                 Section("Kondisi yang Dapat Dideteksi") {
-                    ForEach(Array(Constants.diseaseNames.keys.sorted()), id: \.self) { key in
+                    ForEach(
+                        Array(Constants.diseaseNames.keys.sorted()),
+                        id: \.self
+                    ) { key in
                         let name = Constants.diseaseNames[key]!
                         let level = treatmentLevel(for: key)
                         HStack {
@@ -102,9 +153,11 @@ struct AboutView: View {
                     HStack(alignment: .top, spacing: 10) {
                         Image(systemName: "exclamationmark.triangle.fill")
                             .foregroundStyle(.orange)
-                        Text("Aplikasi ini hanya untuk tujuan edukasi dan bukan pengganti diagnosis medis profesional. Selalu konsultasikan kondisi kulit Anda kepada dokter spesialis.")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
+                        Text(
+                            "Aplikasi ini hanya untuk tujuan edukasi dan bukan pengganti diagnosis medis profesional. Selalu konsultasikan kondisi kulit Anda kepada dokter spesialis."
+                        )
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
                     }
                     .padding(.vertical, 4)
                 }
@@ -119,7 +172,10 @@ struct AboutView: View {
 }
 
 struct InfoRow: View {
-    let icon: String; let color: Color; let label: String; let value: String
+    let icon: String
+    let color: Color
+    let label: String
+    let value: String
     var body: some View {
         HStack {
             Image(systemName: icon).foregroundStyle(color).frame(width: 28)
