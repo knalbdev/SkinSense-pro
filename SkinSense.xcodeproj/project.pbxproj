@@ -1,0 +1,280 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A001 /* SkinSenseApp.swift in Sources */       = {isa = PBXBuildFile; fileRef = F001; };
+		A002 /* ContentView.swift in Sources */        = {isa = PBXBuildFile; fileRef = F002; };
+		A003 /* Constants.swift in Sources */          = {isa = PBXBuildFile; fileRef = F003; };
+		A010 /* SkinCondition.swift in Sources */      = {isa = PBXBuildFile; fileRef = F010; };
+		A011 /* GeminiModels.swift in Sources */       = {isa = PBXBuildFile; fileRef = F011; };
+		A012 /* ScanHistoryStore.swift in Sources */   = {isa = PBXBuildFile; fileRef = F012; };
+		A013 /* ScanViewModel.swift in Sources */      = {isa = PBXBuildFile; fileRef = F013; };
+		A014 /* ResultViewModel.swift in Sources */    = {isa = PBXBuildFile; fileRef = F014; };
+		A020 /* SkinClassifierService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F020; };
+		A021 /* GeminiService.swift in Sources */      = {isa = PBXBuildFile; fileRef = F021; };
+		A030 /* ScanView.swift in Sources */           = {isa = PBXBuildFile; fileRef = F030; };
+		A031 /* ResultView.swift in Sources */         = {isa = PBXBuildFile; fileRef = F031; };
+		A032 /* HistoryView.swift in Sources */        = {isa = PBXBuildFile; fileRef = F032; };
+		A033 /* FeedbackView.swift in Sources */       = {isa = PBXBuildFile; fileRef = F033; };
+		A034 /* AboutView.swift in Sources */          = {isa = PBXBuildFile; fileRef = F034; };
+		A050 /* SkinDisease.mlpackage in Resources */  = {isa = PBXBuildFile; fileRef = F050; };
+		A051 /* Assets.xcassets in Resources */        = {isa = PBXBuildFile; fileRef = F051; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		F001 /* SkinSenseApp.swift */       = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkinSenseApp.swift; sourceTree = "<group>"; };
+		F002 /* ContentView.swift */        = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		F003 /* Constants.swift */          = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		F010 /* SkinCondition.swift */      = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkinCondition.swift; sourceTree = "<group>"; };
+		F011 /* GeminiModels.swift */       = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeminiModels.swift; sourceTree = "<group>"; };
+		F012 /* ScanHistoryStore.swift */   = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanHistoryStore.swift; sourceTree = "<group>"; };
+		F013 /* ScanViewModel.swift */      = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanViewModel.swift; sourceTree = "<group>"; };
+		F014 /* ResultViewModel.swift */    = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultViewModel.swift; sourceTree = "<group>"; };
+		F020 /* SkinClassifierService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkinClassifierService.swift; sourceTree = "<group>"; };
+		F021 /* GeminiService.swift */      = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeminiService.swift; sourceTree = "<group>"; };
+		F030 /* ScanView.swift */           = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanView.swift; sourceTree = "<group>"; };
+		F031 /* ResultView.swift */         = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultView.swift; sourceTree = "<group>"; };
+		F032 /* HistoryView.swift */        = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
+		F033 /* FeedbackView.swift */       = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackView.swift; sourceTree = "<group>"; };
+		F034 /* AboutView.swift */          = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
+		F050 /* SkinDisease.mlpackage */    = {isa = PBXFileReference; lastKnownFileType = wrapper.mlpackage; path = SkinDisease.mlpackage; sourceTree = "<group>"; };
+		F051 /* Assets.xcassets */          = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		FPROD /* SkinSense.app */           = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SkinSense.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		GROOT = {
+			isa = PBXGroup;
+			children = (GMAIN, GPRODUCTS);
+			sourceTree = "<group>";
+		};
+		GPRODUCTS = {
+			isa = PBXGroup;
+			children = (FPROD);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		GMAIN = {
+			isa = PBXGroup;
+			children = (GAPP, GMODELS, GSERVICES, GVIEWS, GRESOURCES, F050);
+			path = SkinSense;
+			sourceTree = "<group>";
+		};
+		GAPP = {
+			isa = PBXGroup;
+			children = (F001, F002, F003);
+			path = App;
+			sourceTree = "<group>";
+		};
+		GMODELS = {
+			isa = PBXGroup;
+			children = (F010, F011, F012, F013, F014);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		GSERVICES = {
+			isa = PBXGroup;
+			children = (F020, F021);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		GVIEWS = {
+			isa = PBXGroup;
+			children = (F030, F031, F032, F033, F034);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		GRESOURCES = {
+			isa = PBXGroup;
+			children = (F051);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		TARGET = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BCLTARGET;
+			buildPhases = (BPSOURCES, BPFRAMEWORKS, BPRESOURCES);
+			buildRules = ();
+			dependencies = ();
+			name = SkinSense;
+			productName = SkinSense;
+			productReference = FPROD;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		PROJECT = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1640;
+				LastUpgradeCheck = 1640;
+				TargetAttributes = {
+					TARGET = {CreatedOnToolsVersion = 16.4;};
+				};
+			};
+			buildConfigurationList = BCLPROJECT;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (en, Base);
+			mainGroup = GROOT;
+			productRefGroup = GPRODUCTS;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (TARGET);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		BPSOURCES = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A001, A002, A003,
+				A010, A011, A012, A013, A014,
+				A020, A021,
+				A030, A031, A032, A033, A034,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		BPFRAMEWORKS = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = ();
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXResourcesBuildPhase section */
+		BPRESOURCES = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (A050, A051);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		BC_DEBUG_PROJ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_TESTABILITY = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("DEBUG=1", "$(inherited)");
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		BC_RELEASE_PROJ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		BC_DEBUG_TARGET = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "SkinSense membutuhkan kamera untuk melakukan scan kondisi kulit.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "SkinSense membutuhkan akses galeri untuk memilih foto kulit.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = ("$(inherited)", "@executable_path/Frameworks");
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nonakoding.SkinSense;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		BC_RELEASE_TARGET = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "SkinSense membutuhkan kamera untuk melakukan scan kondisi kulit.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "SkinSense membutuhkan akses galeri untuk memilih foto kulit.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = ("$(inherited)", "@executable_path/Frameworks");
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nonakoding.SkinSense;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		BCLPROJECT = {
+			isa = XCConfigurationList;
+			buildConfigurations = (BC_DEBUG_PROJ, BC_RELEASE_PROJ);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BCLTARGET = {
+			isa = XCConfigurationList;
+			buildConfigurations = (BC_DEBUG_TARGET, BC_RELEASE_TARGET);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+	};
+	rootObject = PROJECT;
+}
