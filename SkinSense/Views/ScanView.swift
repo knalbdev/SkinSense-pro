@@ -12,6 +12,7 @@ struct ScanView: View {
     @State private var vm = ScanViewModel()
     @State private var pickerItem: PhotosPickerItem?
     @State private var showCamera = false
+    @State private var cameraImage: UIImage?
 
     var body: some View {
         NavigationStack {
@@ -37,6 +38,12 @@ struct ScanView: View {
                         vm.selectedImage = img
                     }
                 }
+            }
+            .onChange(of: cameraImage) { _, img in
+                if let img = img { vm.selectedImage = img }
+            }
+            .fullScreenCover(isPresented: $showCamera) {
+                CameraPicker(image: $cameraImage)
             }
             .navigationDestination(isPresented: $vm.showResult) {
                 if let session = vm.currentSession {
@@ -117,13 +124,9 @@ struct ScanView: View {
                 .clipShape(RoundedRectangle(cornerRadius: 14))
             }
 
-            // Kamera (fallback ke galeri di simulator)
+            // Kamera
             Button {
-                if UIImagePickerController.isSourceTypeAvailable(.camera) {
-                    showCamera = true
-                } else {
-                    // simulator: trigger PhotosPicker
-                }
+                showCamera = true
             } label: {
                 HStack {
                     Image(systemName: "camera.fill")
@@ -204,6 +207,40 @@ struct ScanView: View {
             .padding()
             .background(Color(.secondarySystemGroupedBackground))
             .clipShape(RoundedRectangle(cornerRadius: 14))
+        }
+    }
+}
+
+// MARK: - Camera Picker
+
+struct CameraPicker: UIViewControllerRepresentable {
+    @Binding var image: UIImage?
+    @Environment(\.dismiss) private var dismiss
+
+    func makeUIViewController(context: Context) -> UIImagePickerController {
+        let picker = UIImagePickerController()
+        picker.sourceType = .camera
+        picker.delegate = context.coordinator
+        return picker
+    }
+
+    func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {}
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(self)
+    }
+
+    class Coordinator: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+        let parent: CameraPicker
+        init(_ parent: CameraPicker) { self.parent = parent }
+
+        func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
+            parent.image = (info[.originalImage] as? UIImage)
+            parent.dismiss()
+        }
+
+        func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+            parent.dismiss()
         }
     }
 }
